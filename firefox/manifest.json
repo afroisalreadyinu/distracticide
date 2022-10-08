@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "distracticide",
+  "version": "0.0.1",
+  "description": "Remind yourself what you wanted to do instead of getting distracted",
+  "homepage_url": "https://github.com/afroisalreadyinu/distracticide",
+  "browser_specific_settings": {
+    "gecko": {"id": "distracticide@okigiveup.net"}
+  },
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>", "storage"],
+  "background": {"scripts": ["distracticide.js"], "persistent": false}
+}
