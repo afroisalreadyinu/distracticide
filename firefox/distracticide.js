@@ -5,6 +5,7 @@ function checkURL(requestDetails) {
     let pageUrl = new URL(requestDetails.url);
     for (const url of BlockedPages) {
       if (url === pageUrl.hostname) {
+        browser.storage.local.set({lastBlocked: requestDetails.url});
         browser.tabs.update(requestDetails.tabId, {"url": "/page.html"});
         return {cancel: true};
       }
