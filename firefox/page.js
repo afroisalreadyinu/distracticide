@@ -20,8 +20,16 @@ function deactivateOnTab() {
   });
 }
 
+function addHostname(event) {
+  const hostnameField = event.target.closest('form').getElementsByTagName("input")[0];
+  const newHostname = hostnameField.value;
+  return false;
+}
+
 window.addEventListener('load', function(event) {
   browser.storage.local.get('lastBlocked').then(updateText);
   const button = document.getElementById("disable-button");
   button.onclick = deactivateOnTab;
+  const addHostnameButton = document.getElementById("add-hostname-button");
+  addHostnameButton.onclick = addHostname;
 });

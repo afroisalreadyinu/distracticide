@@ -31,7 +31,7 @@ function tabClosed(tabId) {
     if (deactivatedOnTabs.includes(tabId)) {
       deactivatedOnTabs = deactivatedOnTabs.filter(id => id !== tabId);
       browser.storage.local.set({deactivatedOnTabs});
-    }
+    };
   });
 };
 

@@ -2,3 +2,7 @@ main {
     width: 600px;
     margin: auto;
 }
+
+.add-hostname-form {
+    padding-top: 2em;
+}
