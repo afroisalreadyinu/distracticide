@@ -17,10 +17,22 @@ function checkURL(requestDetails) {
       }
     }
   };
-}
+};
 
 browser.webRequest.onBeforeRequest.addListener(
   checkURL,
   {urls: ["<all_urls>"]},
   ['blocking']
 );
+
+function tabClosed(tabId) {
+  browser.storage.local.get('deactivatedOnTabs').then(function(data) {
+    let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
+    if (deactivatedOnTabs.includes(tabId)) {
+      deactivatedOnTabs = deactivatedOnTabs.filter(id => id !== tabId);
+      browser.storage.local.set({deactivatedOnTabs});
+    }
+  });
+};
+
+browser.tabs.onRemoved.addListener(tabClosed);
