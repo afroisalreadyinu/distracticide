@@ -11,6 +11,10 @@ temporary Add-on", and select `manifest.json`. The extension is now running. If 
 
 # Todos
 
-[ ] Adding and removing URLs
+[ ] Editing the stuff shown
+
+[ ] Error handling
+
+[x] Adding and removing URLs
 
 [x] Navigating to the page nevertheless
