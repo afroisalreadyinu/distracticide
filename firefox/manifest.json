@@ -11,5 +11,6 @@
     "48": "icons/border-48.png"
   },
   "permissions": ["webRequest", "webRequestBlocking", "<all_urls>", "storage", "tabs"],
+  "web_accessible_resources": ["page.html"],
   "background": {"scripts": ["distracticide.js"], "persistent": false}
 }

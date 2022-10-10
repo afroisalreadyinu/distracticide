@@ -1,22 +1,25 @@
 let BlockedPages = ["news.ycombinator.com", "reddit.com", "twitter.com"];
 
-function checkURL(requestDetails) {
+
+async function checkURL(requestDetails) {
+  var retval;
   if (["main_frame", "object"].includes(requestDetails.type)) {
     let pageUrl = new URL(requestDetails.url);
-    for (const url of BlockedPages) {
+    const data = await browser.storage.local.get('deactivatedOnTabs');
+    let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
+    if (deactivatedOnTabs.includes(requestDetails.tabId)) {
+      return {};
+    }
+    const blockedHostsData = await browser.storage.sync.get('blockedHosts');
+    const blockedHosts = blockedHostsData['blockedHosts'] || [];
+    for (const url of blockedHosts) {
       if (url === pageUrl.hostname) {
-        browser.storage.local.get('deactivatedOnTabs').then(function(data) {
-          let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
-          if (deactivatedOnTabs.includes(requestDetails.tabId)) {
-            return {};
-          }
-          browser.storage.local.set({lastBlocked: requestDetails.url});
-          browser.tabs.update(requestDetails.tabId, {"url": "/page.html"});
-          return {cancel: true};
-        });
+        let blocked = encodeURIComponent(requestDetails.url);
+        return {redirectUrl: browser.runtime.getURL(`page.html?blocked=${blocked}`)};
       }
     }
   };
+  return {};
 };
 
 browser.webRequest.onBeforeRequest.addListener(
