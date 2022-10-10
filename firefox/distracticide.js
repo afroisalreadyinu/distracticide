@@ -5,9 +5,15 @@ function checkURL(requestDetails) {
     let pageUrl = new URL(requestDetails.url);
     for (const url of BlockedPages) {
       if (url === pageUrl.hostname) {
-        browser.storage.local.set({lastBlocked: requestDetails.url});
-        browser.tabs.update(requestDetails.tabId, {"url": "/page.html"});
-        return {cancel: true};
+        browser.storage.local.get('deactivatedOnTabs').then(function(data) {
+          let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
+          if (deactivatedOnTabs.includes(requestDetails.tabId)) {
+            return {};
+          }
+          browser.storage.local.set({lastBlocked: requestDetails.url});
+          browser.tabs.update(requestDetails.tabId, {"url": "/page.html"});
+          return {cancel: true};
+        });
       }
     }
   };
