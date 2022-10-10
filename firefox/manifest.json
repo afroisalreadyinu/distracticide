@@ -12,5 +12,6 @@
   },
   "permissions": ["webRequest", "webRequestBlocking", "<all_urls>", "storage", "tabs"],
   "web_accessible_resources": ["page.html"],
+  "options_ui": {"page": "options.html"},
   "background": {"scripts": ["distracticide.js"], "persistent": false}
 }
