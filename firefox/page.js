@@ -1,5 +1,3 @@
-var state = {};
-
 function updateText() {
   const pageUrl = new URL(window.location.href);
   const blocked = pageUrl.searchParams.get("blocked");
@@ -68,6 +66,7 @@ function addHostname(event) {
 }
 
 window.addEventListener('load', function(event) {
+  window.state = {};
   updateText();
   showHostnames();
   const button = document.getElementById("disable-button");
