@@ -12,9 +12,17 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 
 # Todos
 
-[ ] Editing the stuff shown
+[x] Editing the stuff shown
 
 [ ] Error handling
+
+[ ] Unblocking only a single domain on a tab
+
+[ ] Statistics (how often, how long, how many times per hour)
+
+[ ] Styling of web and options page
+
+[ ] Maybe add a button to pop up the config page?
 
 [x] Adding and removing URLs
 

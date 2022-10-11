@@ -1,8 +1,11 @@
 main {
     width: 600px;
     margin: auto;
+    font: 1.2em "Fira Sans", sans-serif;
+    line-height: 1.2em;
 }
 
-.add-hostname-form {
+.form-section {
     padding-top: 2em;
+    padding-bottom: 2em;
 }

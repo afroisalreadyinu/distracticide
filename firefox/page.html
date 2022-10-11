@@ -12,18 +12,24 @@
       <p>Instead of going to <span id="dest-hostname">wherever you wanted to go</span>, consider
       these alternatives:</p>
 
-      <ul>
-        <li>Work on this extension</li>
-        <li>Read Man from the Future</li>
-        <li>Write a book review</li>
+      <ul id="activity-list">
       </ul>
+
+      <div class="form-section add-activity">
+        <form>
+          <label for="activity">Activity:</label>
+          <input  type="text" name="new-activity" size="40">
+          <button id="add-activity-button" type="submit">Add</button>
+        </form>
+      </div>
+
 
       <button id="disable-button">I still want to go there</button>
 
-      <div class="add-hostname-form">
+      <div class="form-section add-hostname">
         <form>
           <label for="hostname">Hostname:</label>
-          <input  id="new-hostname" type="text" name="hostname" size="20">
+          <input  type="text" name="new-hostname" size="20">
           <button id="add-hostname-button" type="submit">Add</button>
         </form>
       </div>

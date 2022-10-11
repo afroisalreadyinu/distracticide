@@ -14,6 +14,14 @@ function appendToHostnames(hostname) {
   hostnameList.append(li);
 }
 
+function appendToActivities(activity) {
+  const activityList = document.getElementById("activity-list");
+  const li = document.createElement('li');
+  li.innerHTML = `<span class='activity'>${activity}</span> <a href="#" class="remove-link">Remove</a>`;
+  activityList.append(li);
+}
+
+
 function showHostnames() {
   browser.storage.sync.get('blockedHosts').then((values) => {
     const hostnames = values['blockedHosts'] || [];
@@ -22,6 +30,16 @@ function showHostnames() {
     }
   });
 }
+
+function showActivities() {
+  browser.storage.sync.get('activities').then((values) => {
+    const activities = values['activities'] || [];
+    for (const activity of activities) {
+      appendToActivities(activity);
+    }
+  });
+}
+
 function removeHostname(event) {
   if (!event.target.matches('.remove-link')) return false;
   const hostname = event.target.parentElement.getElementsByClassName('hostname')[0].innerHTML;
@@ -36,6 +54,22 @@ function removeHostname(event) {
   });
   return false;
 }
+
+function removeActivity(event) {
+  if (!event.target.matches('.remove-link')) return false;
+  const activity = event.target.parentElement.getElementsByClassName('activity')[0].innerHTML;
+  browser.storage.sync.get('activities').then((values) => {
+    let activities = values['activities'] || [];
+    if (activities.includes(activity)) {
+      activities = activities.filter(act => act !== activity);
+      browser.storage.sync.set({activities}).then(() => {
+        event.target.parentElement.remove();
+      });
+    };
+  });
+  return false;
+}
+
 
 function deactivateOnTab() {
   browser.storage.local.get('deactivatedOnTabs').then(function(data) {
@@ -65,16 +99,40 @@ function addHostname(event) {
   return false;
 }
 
+function addActivity(event) {
+  const activityField = event.target.closest('form').getElementsByTagName("input")[0];
+  const newActivity = activityField.value;
+  browser.storage.sync.get('activities').then((values) => {
+    let activities = values['activities'] || [];
+    if (!activities.includes(newActivity)) {
+      activities.push(newActivity);
+      browser.storage.sync.set({activities}).then(() => {
+        activityField.value = "";
+        appendToActivities(newActivity);
+      });
+    };
+  });
+  return false;
+}
+
 window.addEventListener('load', function(event) {
   window.state = {};
   updateText();
   showHostnames();
+  showActivities();
   const button = document.getElementById("disable-button");
   if (button) {
     button.onclick = deactivateOnTab;
   }
   const addHostnameButton = document.getElementById("add-hostname-button");
   addHostnameButton.onclick = addHostname;
+
+  const addActivityButton = document.getElementById("add-activity-button");
+  addActivityButton.onclick = addActivity;
+
   const hostnameList = document.getElementById("hostname-list");
   hostnameList.addEventListener('click', removeHostname);
+
+  const activityList = document.getElementById("activity-list");
+  activityList.addEventListener('click', removeActivity);
 });
