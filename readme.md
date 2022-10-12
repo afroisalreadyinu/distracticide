@@ -12,18 +12,24 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 
 # Todos
 
-[x] Editing the stuff shown
-
 [ ] Error handling
+
+[ ] Make links clickable and shorten them
+
+[ ] Markdown for links
 
 [ ] Unblocking only a single domain on a tab
 
 [ ] Statistics (how often, how long, how many times per hour)
 
-[ ] Styling of web and options page
-
 [ ] Maybe add a button to pop up the config page?
+
+[ ] Change location and text of button each time
+
+[ ] Styling of web and options page
 
 [x] Adding and removing URLs
 
 [x] Navigating to the page nevertheless
+
+[x] Editing the stuff shown
