@@ -1,5 +1,5 @@
-function updateText() {
-  const pageUrl = new URL(window.location.href);
+function updateText(theWindow) {
+  const pageUrl = new URL(theWindow.location.href);
   const blocked = pageUrl.searchParams.get("blocked");
   if (!blocked) return;
   const blockedUrl = new URL(blocked);
@@ -84,30 +84,46 @@ function deactivateOnTab() {
 }
 
 function addHostname(event) {
-  const hostnameField = event.target.closest('form').getElementsByTagName("input")[0];
+  const form = event.target.closest('form');
+  const hostnameField = form.getElementsByTagName("input")[0];
+  const errorField = form.getElementsByClassName("form-error")[0];
   const newHostname = hostnameField.value;
+  if (newHostname.trim() === "") {
+    errorField.innerHTML = "Provide non-empty host";
+    return false;
+  }
   browser.storage.sync.get('blockedHosts').then((values) => {
     let blockedHosts = values['blockedHosts'] || [];
     if (!blockedHosts.includes(newHostname)) {
       blockedHosts.push(newHostname);
       browser.storage.sync.set({blockedHosts}).then(() => {
         hostnameField.value = "";
+        errorField.innerHTML = "";
         appendToHostnames(newHostname);
       });
+    } else {
+      errorField.innerHTML = "Host already in list";
     };
   });
   return false;
 }
 
 function addActivity(event) {
-  const activityField = event.target.closest('form').getElementsByTagName("input")[0];
+  const form = event.target.closest('form');
+  const activityField = form.getElementsByTagName("input")[0];
+  const errorField = form.getElementsByClassName("form-error")[0];
   const newActivity = activityField.value;
+  if (newActivity.trim() === "") {
+    errorField.innerHTML = "Provide non-empty activity";
+    return false;
+  }
   browser.storage.sync.get('activities').then((values) => {
     let activities = values['activities'] || [];
     if (!activities.includes(newActivity)) {
       activities.push(newActivity);
       browser.storage.sync.set({activities}).then(() => {
         activityField.value = "";
+        errorField.innerHTML = "";
         appendToActivities(newActivity);
       });
     };
@@ -117,7 +133,7 @@ function addActivity(event) {
 
 window.addEventListener('load', function(event) {
   window.state = {};
-  updateText();
+  updateText(window);
   showHostnames();
   showActivities();
   const button = document.getElementById("disable-button");
