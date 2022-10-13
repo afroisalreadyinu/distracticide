@@ -12,13 +12,9 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 
 # Todos
 
-[ ] Error handling
-
 [ ] Make links clickable and shorten them
 
 [ ] Markdown for links
-
-[ ] Unblocking only a single domain on a tab
 
 [ ] Statistics (how often, how long, how many times per hour)
 
@@ -33,3 +29,5 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 [x] Navigating to the page nevertheless
 
 [x] Editing the stuff shown
+
+[x] Error handling
