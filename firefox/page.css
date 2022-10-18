@@ -26,3 +26,11 @@ ul {
 #activity-list .remove-link {
     font-size: 1rem;
 }
+
+.bail-out {
+    display: flex;
+}
+
+.bail-out button {
+    margin: 0 auto;
+}
