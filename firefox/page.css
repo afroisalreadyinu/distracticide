@@ -8,6 +8,7 @@
     --blue-saphire: #19647E;
     --paradise-ping: #EF476F;
     --caribbean-green: #06D6A0;
+    --imperial-red: #F02D3A;
 }
 
 body {
@@ -56,6 +57,10 @@ ul {
 
 #activity-list li:nth-child(3) {
     color: var(--caribbean-green);
+}
+
+#activity-list li:nth-child(4) {
+    color: var(--imperial-red);
 }
 
 #activity-list .remove-link {
