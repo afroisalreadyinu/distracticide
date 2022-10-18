@@ -12,11 +12,11 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 
 # Todos
 
-[ ] Color schema
-
 [ ] General styling
 
 [ ] Styling of forms
+
+[ ] Edit action items by clicking on them
 
 [ ] Add a button to pop up the config page
 
@@ -33,3 +33,5 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 [x] Make links clickable
 
 [x] Shorten links
+
+[x] Color schema

@@ -1,7 +1,29 @@
+:root {
+    --bright-gray: #EEEEEE;
+    --chinese-silver: #CCCCCC;
+    --spanish-gray: #999999;
+    --granite-gray: #666666;
+    --dark-charcoal: #333333;
+    --black: #000000;
+    --blue-saphire: #19647E;
+    --paradise-ping: #EF476F;
+    --caribbean-green: #06D6A0;
+}
+
+body {
+    background-color: var(--bright-gray);
+    color: var(--dark-charcoal);
+}
+
 main {
-    width: 720px;
+    width: 800px;
     margin: 0 auto;
     font-family: "Helvetica Neue", "Arial", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: var(--blue-saphire);
 }
 
 .form-section {
@@ -13,18 +35,32 @@ ul {
     list-style: none;
     display: flex;
     flex-flow: column;
-    gap: 0.5rem;
+    gap: 1rem;
     margin: 0;
     padding: 0;
 }
 
 #activity-list {
-    font-size: 2rem;
-    line-height: 1.5;
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+#activity-list li:nth-child(2n) {
+    margin-left: 1.6rem;
+}
+
+#activity-list li:first-child {
+    color: var(--paradise-ping);
+}
+
+#activity-list li:nth-child(3) {
+    color: var(--caribbean-green);
 }
 
 #activity-list .remove-link {
     font-size: 1rem;
+    font-weight: normal;
 }
 
 .bail-out {
