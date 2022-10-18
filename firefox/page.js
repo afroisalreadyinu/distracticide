@@ -108,11 +108,25 @@ function addHostname(event) {
   return false;
 }
 
+const LINK_RE = /(https\:\/\/[0-9a-zA-Z.\/]*)/g;
+const LINK_TEXT_LENGTH = 15;
+
+function processLinks(activity) {
+  var retval = activity;
+  const links = activity.match(LINK_RE);
+  links.forEach((link) => {
+    const linkText = link.length > LINK_TEXT_LENGTH ? link.slice(0, LINK_TEXT_LENGTH) + "..." : link;
+    retval = retval.replace(link, `<a class="extlink" href="${link}">${linkText}</a>`);
+  });
+  return retval;
+}
+
+
 function addActivity(event) {
   const form = event.target.closest('form');
   const activityField = form.getElementsByTagName("input")[0];
   const errorField = form.getElementsByClassName("form-error")[0];
-  const newActivity = activityField.value;
+  const newActivity = processLinks(activityField.value);
   if (newActivity.trim() === "") {
     errorField.innerHTML = "Provide non-empty activity";
     return false;

@@ -12,17 +12,15 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 
 # Todos
 
-[ ] Make links clickable and shorten them
+[ ] Color schema
 
-[ ] Markdown for links
+[ ] General styling
+
+[ ] Styling of forms
+
+[ ] Add a button to pop up the config page
 
 [ ] Statistics (how often, how long, how many times per hour)
-
-[ ] Maybe add a button to pop up the config page?
-
-[ ] Change location and text of button each time
-
-[ ] Styling of web and options page
 
 [x] Adding and removing URLs
 
@@ -31,3 +29,7 @@ debug console for the extension, click on "Inspect" next to the freshly installe
 [x] Editing the stuff shown
 
 [x] Error handling
+
+[x] Make links clickable
+
+[x] Shorten links
