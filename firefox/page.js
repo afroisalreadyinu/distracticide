@@ -1,3 +1,5 @@
+"use strict";
+
 function updateText(theWindow) {
   const pageUrl = new URL(theWindow.location.href);
   const blocked = pageUrl.searchParams.get("blocked");
@@ -113,7 +115,7 @@ const LINK_TEXT_LENGTH = 15;
 
 function processLinks(activity) {
   var retval = activity;
-  const links = activity.match(LINK_RE);
+  const links = activity.match(LINK_RE) || [];
   links.forEach((link) => {
     const linkText = link.length > LINK_TEXT_LENGTH ? link.slice(0, LINK_TEXT_LENGTH) + "..." : link;
     retval = retval.replace(link, `<a class="extlink" href="${link}">${linkText}</a>`);
