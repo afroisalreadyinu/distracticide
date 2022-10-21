@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.1.0/mocha.min.js" integrity="sha512-crGRRI1PNDT2hyVSqSoK5TGP/HnbF5SMHtN4LHxK/ZrcvJY0QM1HKPUvcy0NAp7mVWqp7A+gEn9CUFrQ4yzn4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.1.0/mocha.css" integrity="sha512-FT3S+M/6LEbewzmu9OibC+ZmCz2uQPEiwmNAGKSYfueVZ/Lxp/UQ//4sh4B0RCTB/ilxTn/Ho70K9qZrrAQv6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.6/chai.min.js" integrity="sha512-sP7hp2cpEWsmOHQPc6taNuXFmvG59BhI3YS3tOvZ+nDEqOyyORLiY3nBjLkWgCNI8SFZ5koUyiBO42Q3wzZDrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+  <body>
+    <script class="mocha-init">
+      mocha.setup('bdd');
+      mocha.checkLeaks();
+      console.log(mocha.describe);
+    </script>
+
+    <script src="_test.js"></script>
+
+
+    <div id="mocha"></div>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>

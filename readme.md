@@ -31,6 +31,10 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 [ ] Statistics (how often, how long, how many times per hour)
 
+[ ] Testing
+
+[ ] Add linting
+
 [x] Adding and removing URLs
 
 [x] Navigating to the page nevertheless
