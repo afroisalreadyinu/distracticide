@@ -19,6 +19,7 @@ function getHandlers(browser) {
     return {};
   };
 
+  // This can't be async, unfortunately, so we have to do a callback
   function tabClosed(tabId) {
     browser.storage.local.get('deactivatedOnTabs').then(function(data) {
       let deactivatedOnTabs = data['deactivatedOnTabs'] || [];

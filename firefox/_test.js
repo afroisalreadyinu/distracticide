@@ -45,7 +45,6 @@ describe("Background scripts", () => {
   });
 
   it("Skips if deactivated on tab", async function() {
-    console.log("Now this one");
     const fakeBrowser = new FakeBrowser(["twitter.com"], [72]);
     let [checkURL, _] = getHandlers(fakeBrowser);
     const url = "https://twitter.com/some/path";
