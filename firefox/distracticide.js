@@ -1,15 +1,13 @@
-let BlockedPages = ["news.ycombinator.com", "reddit.com", "twitter.com"];
+"use strict";
 
+function getHandlers(browser) {
 
-async function checkURL(requestDetails) {
-  var retval;
-  if (["main_frame", "object"].includes(requestDetails.type)) {
+  async function checkURL(requestDetails) {
+    if (!["main_frame", "object"].includes(requestDetails.type)) return {};
     let pageUrl = new URL(requestDetails.url);
     const data = await browser.storage.local.get('deactivatedOnTabs');
     let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
-    if (deactivatedOnTabs.includes(requestDetails.tabId)) {
-      return {};
-    }
+    if (deactivatedOnTabs.includes(requestDetails.tabId)) return {};
     const blockedHostsData = await browser.storage.sync.get('blockedHosts');
     const blockedHosts = blockedHostsData['blockedHosts'] || [];
     for (const url of blockedHosts) {
@@ -18,24 +16,30 @@ async function checkURL(requestDetails) {
         return {redirectUrl: browser.runtime.getURL(`page.html?blocked=${blocked}`)};
       }
     }
+    return {};
   };
-  return {};
-};
 
-browser.webRequest.onBeforeRequest.addListener(
-  checkURL,
-  {urls: ["<all_urls>"]},
-  ['blocking']
-);
+  function tabClosed(tabId) {
+    browser.storage.local.get('deactivatedOnTabs').then(function(data) {
+      let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
+      if (deactivatedOnTabs.includes(tabId)) {
+        deactivatedOnTabs = deactivatedOnTabs.filter(id => id !== tabId);
+        browser.storage.local.set({deactivatedOnTabs});
+      };
+    });
+  };
 
-function tabClosed(tabId) {
-  browser.storage.local.get('deactivatedOnTabs').then(function(data) {
-    let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
-    if (deactivatedOnTabs.includes(tabId)) {
-      deactivatedOnTabs = deactivatedOnTabs.filter(id => id !== tabId);
-      browser.storage.local.set({deactivatedOnTabs});
-    };
-  });
-};
+  return [checkURL, tabClosed];
+}
 
-browser.tabs.onRemoved.addListener(tabClosed);
+function init(browser) {
+  let [checkURL, tabClosed] = getHandlers(browser);
+  browser.webRequest.onBeforeRequest.addListener(
+    checkURL,
+    {urls: ["<all_urls>"]},
+    ['blocking']
+  );
+  browser.tabs.onRemoved.addListener(tabClosed);
+}
+
+if (typeof browser !== "undefined") init(browser);
