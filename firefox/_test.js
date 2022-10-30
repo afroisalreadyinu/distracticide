@@ -1,9 +1,10 @@
 "use strict";
 
 let assert = chai.assert;
+const VERY_RANDOM_ID = 58;
 
 class FakeBrowser {
-  constructor(domains=[], deactivatedOnTabs=[]) {
+  constructor(domains=[], deactivatedOnTabs=[], activities=[]) {
     let fb = this;
     this.deactivatedOnTabs = deactivatedOnTabs;
     this.storage = {
@@ -12,8 +13,13 @@ class FakeBrowser {
         async set(values) { for (const key in values) fb[key] = values[key]; }
       },
       sync: {
-        async get(key) { return {blockedHosts: domains}; }
+        async get(key) { return {blockedHosts: domains, activities: activities}; }
       },
+    };
+    this.tabs = {
+      async getCurrent() {
+        return {id: VERY_RANDOM_ID};
+      }
     };
     this.runtime = {
       getURL(targetURL) {
@@ -34,12 +40,20 @@ class FakeWindow {
   };
 };
 
+class FakeUL {
+  items = []
+  append(item) {
+    this.items.push(item);
+  }
+  addEventListener(listener) {}
+}
+
 class FakeDocument {
   constructor(elements) {
     this.elements = {'add-hostname-button': {},
                      'add-activity-button': {},
-                     'hostname-list': {append: function(item) {}, addEventListener: function(listener) {}},
-                     'activity-list': {append: function(item) {}, addEventListener: function(listener) {}},
+                     'hostname-list': new FakeUL(),
+                     'activity-list': new FakeUL(),
                      'disable-button': {what: "now"},
                      'dest-hostname': {}};
   }
@@ -101,24 +115,51 @@ describe("Background scripts", () => {
 
 describe("Extension page", () => {
 
-  it("Intro text updated", function() {
+  it("Intro text updated", async function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
     const fakeDocument = new FakeDocument();
     loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
     assert.equal(Object.keys(fakeWindow.eventListeners).length, 1);
     assert("load" in fakeWindow.eventListeners);
-    fakeWindow.eventListeners.load();
+    await fakeWindow.eventListeners.load();
     assert.equal(fakeDocument.elements['dest-hostname'].textContent, 'twitter.com');
   });
 
-  it("Disable button navigates away and disables", async function() {
+  it("Tasks are loaded from storage", async function() {
+    const fakeBrowser = new FakeBrowser(["twitter.com"], [], ["Do something"]);
+    const fakeWindow = new FakeWindow("https://twitter.com");
+    const fakeDocument = new FakeDocument();
+    let activities = fakeDocument.elements['activity-list'].items;
+    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    await fakeWindow.eventListeners.load();
+    assert.equal(activities.length, 1);
+    assert.equal(activities[0].innerHTML,
+                 '<span class="activity">Do something</span> <a href="#" class="remove-link">Remove</a>');
+  });
+
+  it("Blocked hosts are loaded from storage", async function() {
+    const fakeBrowser = new FakeBrowser(["twitter.com"], [], []);
+    const fakeWindow = new FakeWindow("https://twitter.com");
+    const fakeDocument = new FakeDocument();
+    let activities = fakeDocument.elements['hostname-list'].items;
+    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    await fakeWindow.eventListeners.load();
+    assert.equal(activities.length, 1);
+    assert.equal(activities[0].innerHTML,
+                 '<span class="hostname">twitter.com</span> <a href="#" class="remove-link">Remove</a>');
+  });
+
+  it("Deactivate button navigates away and deactivates", async function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
     const fakeDocument = new FakeDocument();
     loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
-    fakeWindow.eventListeners.load();
+    await fakeWindow.eventListeners.load();
     assert.notEqual(fakeDocument.elements['disable-button'].onclick, undefined);
+    await fakeDocument.elements['disable-button'].onclick();
+    assert.deepEqual(fakeBrowser.deactivatedOnTabs, [VERY_RANDOM_ID]);
+    assert.equal(fakeWindow.location.href, "https://twitter.com");
   });
 
 });

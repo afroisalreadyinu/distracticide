@@ -14,28 +14,27 @@ function loadDistracticide(browser, window, document) {
   function appendToHostnames(hostname) {
     const hostnameList = document.getElementById("hostname-list");
     const li = document.createElement('li');
-    li.innerHTML = `<span class='hostname'>${hostname}</span> <a href="#" class="remove-link">Remove</a>`;
+    li.innerHTML = `<span class="hostname">${hostname}</span> <a href="#" class="remove-link">Remove</a>`;
     hostnameList.append(li);
   }
 
   function appendToActivities(activity) {
     const activityList = document.getElementById("activity-list");
     const li = document.createElement('li');
-    li.innerHTML = `<span class='activity'>${activity}</span> <a href="#" class="remove-link">Done</a>`;
+    li.innerHTML = `<span class="activity">${activity}</span> <a href="#" class="remove-link">Remove</a>`;
     activityList.append(li);
   }
 
 
-  function showHostnames() {
-    browser.storage.sync.get('blockedHosts').then((values) => {
-      const hostnames = values['blockedHosts'] || [];
-      for (const hostname of hostnames) {
-        appendToHostnames(hostname);
-      }
-    });
+  async function showHostnames() {
+    let values = await browser.storage.sync.get('blockedHosts');
+    const hostnames = values['blockedHosts'] || [];
+    for (const hostname of hostnames) {
+      appendToHostnames(hostname);
+    }
   }
 
-  function showActivities() {
+  async function showActivities() {
     browser.storage.sync.get('activities').then((values) => {
       const activities = values['activities'] || [];
       for (const activity of activities) {
@@ -76,15 +75,12 @@ function loadDistracticide(browser, window, document) {
 
 
   async function deactivateOnTab() {
-    browser.storage.local.get('deactivatedOnTabs').then(function(data) {
-      let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
-      const currentTabId = browser.tabs.getCurrent().then(function(ct) {
-        deactivatedOnTabs.push(ct.id);
-        browser.storage.local.set({deactivatedOnTabs}).then(function() {
-          window.location.href = window.state['blockedUrl'];
-        });
-      });
-    });
+    let data = await browser.storage.local.get('deactivatedOnTabs');
+    let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
+    const ct = await browser.tabs.getCurrent();
+    deactivatedOnTabs.push(ct.id);
+    await browser.storage.local.set({deactivatedOnTabs});
+    window.location.href = window.state['blockedUrl'];
   }
 
   function addHostname(event) {
@@ -149,14 +145,13 @@ function loadDistracticide(browser, window, document) {
     return false;
   }
 
-  window.addEventListener('load', function(event) {
+  window.addEventListener('load', async function(event) {
     window.state = {};
     updateText(window);
-    showHostnames();
-    showActivities();
+    await showActivities();
+    await showHostnames();
     const button = document.getElementById("disable-button");
     if (button) {
-      console.log(button)
       button.onclick = deactivateOnTab;
     }
     const addHostnameButton = document.getElementById("add-hostname-button");
