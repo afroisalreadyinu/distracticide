@@ -43,19 +43,16 @@ function loadDistracticide(browser, window, document) {
     });
   }
 
-  function removeHostname(event) {
-    if (!event.target.matches('.remove-link')) return false;
+  async function removeHostname(event) {
+    if (!event.target.matches('.remove-link')) return;
     const hostname = event.target.parentElement.getElementsByClassName('hostname')[0].innerHTML;
-    browser.storage.sync.get('blockedHosts').then((values) => {
-      let hostnames = values['blockedHosts'] || [];
-      if (hostnames.includes(hostname)) {
-        hostnames = hostnames.filter(hn => hn !== hostname);
-        browser.storage.sync.set({blockedHosts: hostnames}).then(() => {
-          event.target.parentElement.remove();
-        });
-      };
-    });
-    return false;
+    let values = await browser.storage.sync.get('blockedHosts');
+    let hostnames = values['blockedHosts'] || [];
+    if (hostnames.includes(hostname)) {
+      hostnames = hostnames.filter(hn => hn !== hostname);
+      await browser.storage.sync.set({blockedHosts: hostnames});
+      event.target.parentElement.remove();
+    };
   }
 
   function removeActivity(event) {
@@ -72,7 +69,6 @@ function loadDistracticide(browser, window, document) {
     });
     return false;
   }
-
 
   async function deactivateOnTab() {
     let data = await browser.storage.local.get('deactivatedOnTabs');

@@ -44,10 +44,13 @@ class FakeWindow {
 
 class FakeUL {
   items = []
+  listeners = {}
   append(item) {
     this.items.push(item);
   }
-  addEventListener(listener) {}
+  addEventListener(event, listener) {
+    this.listeners[event] = listener;
+  }
 }
 
 class FakeDocument {
@@ -67,7 +70,7 @@ class FakeDocument {
   }
 }
 
-class FakeForm {
+class FakeElement {
   constructor(subelements) {
     this.subelements = subelements;
   }
@@ -186,10 +189,23 @@ describe("Extension page", () => {
     await fakeWindow.eventListeners.load();
     let onclick = fakeDocument.elements['add-hostname-button'].onclick;
     assert.notEqual(onclick, undefined);
-    let fakeForm = new FakeForm([{tag: 'input', value: 'spiegel.de'}, {klass: 'form-error'}]);
+    let fakeForm = new FakeElement([{tag: 'input', value: 'spiegel.de'}, {klass: 'form-error'}]);
     let event = { target: {closest: function(tag) {if (tag == 'form') return fakeForm; return null;} } };
     await onclick(event);
     assert.deepEqual(fakeBrowser.sync.blockedHosts, ['spiegel.de']);
+  });
+
+  it("You can remove hostnames", async function() {
+    const fakeBrowser = new FakeBrowser([], []);
+    const fakeWindow = new FakeWindow("https://twitter.com");
+    const fakeDocument = new FakeDocument();
+    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    await fakeWindow.eventListeners.load();
+    let onclick = fakeDocument.elements['hostname-list'].listeners['click'];
+    assert.notEqual(onclick, undefined);
+    let parent = new FakeElement([{klass: 'hostname'}]);
+    let target = {parentElement: parent, matches: function(spec) {if (spec == '.remove-link') return true; return false;} };
+    await onclick({target});
   });
 
 });
