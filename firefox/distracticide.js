@@ -21,7 +21,7 @@ function getHandlers(browser) {
 
   // This can't be async, unfortunately, so we have to do a callback
   function tabClosed(tabId) {
-    browser.storage.local.get('deactivatedOnTabs').then(function(data) {
+    return browser.storage.local.get('deactivatedOnTabs').then(function(data) {
       let deactivatedOnTabs = data['deactivatedOnTabs'] || [];
       if (deactivatedOnTabs.includes(tabId)) {
         deactivatedOnTabs = deactivatedOnTabs.filter(id => id !== tabId);
