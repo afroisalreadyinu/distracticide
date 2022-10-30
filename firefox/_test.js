@@ -71,6 +71,7 @@ class FakeDocument {
 }
 
 class FakeElement {
+  removed = false;
   constructor(subelements) {
     this.subelements = subelements;
   }
@@ -79,6 +80,9 @@ class FakeElement {
   }
   getElementsByClassName(klass) {
     return this.subelements.filter((e) => e.klass == klass);
+  }
+  remove() {
+    this.removed = true;
   }
 }
 
@@ -196,16 +200,18 @@ describe("Extension page", () => {
   });
 
   it("You can remove hostnames", async function() {
-    const fakeBrowser = new FakeBrowser([], []);
+    const fakeBrowser = new FakeBrowser(['spiegel.de', 'twitter.com'], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
     const fakeDocument = new FakeDocument();
     loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
     await fakeWindow.eventListeners.load();
     let onclick = fakeDocument.elements['hostname-list'].listeners['click'];
     assert.notEqual(onclick, undefined);
-    let parent = new FakeElement([{klass: 'hostname'}]);
+    let parent = new FakeElement([{klass: 'hostname', innerHTML: 'spiegel.de'}]);
     let target = {parentElement: parent, matches: function(spec) {if (spec == '.remove-link') return true; return false;} };
     await onclick({target});
+    assert.deepEqual(fakeBrowser.sync.blockedHosts, ['twitter.com']);
+    assert.isTrue(parent.removed);
   });
 
 });
