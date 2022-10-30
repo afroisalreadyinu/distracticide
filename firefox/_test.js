@@ -8,14 +8,15 @@ class FakeBrowser {
     let fb = this;
     this.deactivatedOnTabs = deactivatedOnTabs;
     this.sync = {blockedHosts: domains, activities: activities};
+    this.local = { deactivatedOnTabs: fb.deactivatedOnTabs };
     this.storage = {
       local: {
-        async get(key) { return { deactivatedOnTabs: fb.deactivatedOnTabs }; },
-        async set(values) { for (const key in values) fb[key] = values[key]; }
+        async get(key) { return fb.local; },
+        async set(values) { Object.assign(fb.local, values); }
       },
       sync: {
         async get(key) { return fb.sync; },
-        async set(values) { for (const key in values) fb.sync[key] = values[key]; }
+        async set(values) { Object.assign(fb.sync, values); }
       },
     };
     this.tabs = {
@@ -123,14 +124,14 @@ describe("Background scripts", () => {
     const fakeBrowser = new FakeBrowser(["twitter.com"], [64, 72]);
     let [_, tabClosed] = getHandlers(fakeBrowser);
     tabClosed(54);
-    assert.deepEqual(fakeBrowser.deactivatedOnTabs, [64, 72]);
+    assert.deepEqual(fakeBrowser.local.deactivatedOnTabs, [64, 72]);
   });
 
   it("Pops tab ID if tab in blocked", function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], [64, 72]);
     let [_, tabClosed] = getHandlers(fakeBrowser);
     let promise = tabClosed(72);
-    promise.then(() => assert.deepEqual(fakeBrowser.deactivatedOnTabs, [64]));
+    promise.then(() => assert.deepEqual(fakeBrowser.local.deactivatedOnTabs, [64]));
   });
 
 });
@@ -181,7 +182,7 @@ describe("Extension page", () => {
     let onclick = fakeDocument.elements['disable-button'].onclick;
     assert.notEqual(onclick, undefined);
     await onclick();
-    assert.deepEqual(fakeBrowser.deactivatedOnTabs, [VERY_RANDOM_ID]);
+    assert.deepEqual(fakeBrowser.local.deactivatedOnTabs, [VERY_RANDOM_ID]);
     assert.equal(fakeWindow.location.href, "https://twitter.com");
   });
 
