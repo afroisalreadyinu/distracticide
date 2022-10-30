@@ -83,7 +83,7 @@ function loadDistracticide(browser, window, document) {
     window.location.href = window.state['blockedUrl'];
   }
 
-  function addHostname(event) {
+  async function addHostname(event) {
     const form = event.target.closest('form');
     const hostnameField = form.getElementsByTagName("input")[0];
     const errorField = form.getElementsByClassName("form-error")[0];
@@ -92,19 +92,17 @@ function loadDistracticide(browser, window, document) {
       errorField.innerHTML = "Provide non-empty host";
       return false;
     }
-    browser.storage.sync.get('blockedHosts').then((values) => {
-      let blockedHosts = values['blockedHosts'] || [];
-      if (!blockedHosts.includes(newHostname)) {
-        blockedHosts.push(newHostname);
-        browser.storage.sync.set({blockedHosts}).then(() => {
-          hostnameField.value = "";
-          errorField.innerHTML = "";
-          appendToHostnames(newHostname);
-        });
-      } else {
-        errorField.innerHTML = "Host already in list";
-      };
-    });
+    let values = await browser.storage.sync.get('blockedHosts');
+    let blockedHosts = values['blockedHosts'] || [];
+    if (!blockedHosts.includes(newHostname)) {
+      blockedHosts.push(newHostname);
+      await browser.storage.sync.set({blockedHosts});
+      hostnameField.value = "";
+      errorField.innerHTML = "";
+      appendToHostnames(newHostname);
+    } else {
+      errorField.innerHTML = "Host already in list";
+    };
     return false;
   }
 

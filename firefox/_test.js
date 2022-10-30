@@ -7,13 +7,15 @@ class FakeBrowser {
   constructor(domains=[], deactivatedOnTabs=[], activities=[]) {
     let fb = this;
     this.deactivatedOnTabs = deactivatedOnTabs;
+    this.sync = {blockedHosts: domains, activities: activities};
     this.storage = {
       local: {
         async get(key) { return { deactivatedOnTabs: fb.deactivatedOnTabs }; },
         async set(values) { for (const key in values) fb[key] = values[key]; }
       },
       sync: {
-        async get(key) { return {blockedHosts: domains, activities: activities}; }
+        async get(key) { return fb.sync; },
+        async set(values) { for (const key in values) fb.sync[key] = values[key]; }
       },
     };
     this.tabs = {
@@ -64,6 +66,19 @@ class FakeDocument {
     return {};
   }
 }
+
+class FakeForm {
+  constructor(subelements) {
+    this.subelements = subelements;
+  }
+  getElementsByTagName(tag) {
+    return this.subelements.filter((e) => e.tag == tag);
+  }
+  getElementsByClassName(klass) {
+    return this.subelements.filter((e) => e.klass == klass);
+  }
+}
+
 
 describe("Background scripts", () => {
 
@@ -156,10 +171,25 @@ describe("Extension page", () => {
     const fakeDocument = new FakeDocument();
     loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
     await fakeWindow.eventListeners.load();
-    assert.notEqual(fakeDocument.elements['disable-button'].onclick, undefined);
-    await fakeDocument.elements['disable-button'].onclick();
+    let onclick = fakeDocument.elements['disable-button'].onclick;
+    assert.notEqual(onclick, undefined);
+    await onclick();
     assert.deepEqual(fakeBrowser.deactivatedOnTabs, [VERY_RANDOM_ID]);
     assert.equal(fakeWindow.location.href, "https://twitter.com");
+  });
+
+  it("You can add new hostnames", async function() {
+    const fakeBrowser = new FakeBrowser([], []);
+    const fakeWindow = new FakeWindow("https://twitter.com");
+    const fakeDocument = new FakeDocument();
+    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    await fakeWindow.eventListeners.load();
+    let onclick = fakeDocument.elements['add-hostname-button'].onclick;
+    assert.notEqual(onclick, undefined);
+    let fakeForm = new FakeForm([{tag: 'input', value: 'spiegel.de'}, {klass: 'form-error'}]);
+    let event = { target: {closest: function(tag) {if (tag == 'form') return fakeForm; return null;} } };
+    await onclick(event);
+    assert.deepEqual(fakeBrowser.sync.blockedHosts, ['spiegel.de']);
   });
 
 });
