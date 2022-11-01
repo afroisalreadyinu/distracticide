@@ -21,6 +21,8 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 [ ] Compatibility with Chrome (see [here](https://blog.shahednasser.com/making-your-extension-compatible-with-both-chrome-and-firefox/))
 
+[ ] Move to MV3 https://blog.mozilla.org/addons/2022/10/31/begin-your-mv3-migration-by-implementing-new-features-today/
+
 [ ] General styling
 
 [ ] Styling of forms
