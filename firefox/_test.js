@@ -69,6 +69,12 @@ class FakeDocument {
   createElement(tag) {
     return {};
   }
+  querySelector(selector) {
+    if (selector.startsWith("#")) {
+      return this.elements[selector.substring(1)];
+    }
+    return null;
+  }
 }
 
 class FakeElement {

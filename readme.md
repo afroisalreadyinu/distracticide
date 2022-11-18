@@ -17,11 +17,15 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 # Todos
 
-[ ] Use [web-ext](https://github.com/mozilla/web-ext) to run tests (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
+[ ] Change page tests to use actual elements in a frame
 
 [ ] Compatibility with Chrome (see [here](https://blog.shahednasser.com/making-your-extension-compatible-with-both-chrome-and-firefox/))
 
 [ ] Move to MV3 https://blog.mozilla.org/addons/2022/10/31/begin-your-mv3-migration-by-implementing-new-features-today/
+
+[ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
+
+[ ] Publish extension ([guide](https://extensionworkshop.com/documentation/publish/))
 
 [ ] General styling
 

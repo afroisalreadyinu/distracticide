@@ -7,19 +7,19 @@ function loadDistracticide(browser, window, document) {
     const blocked = pageUrl.searchParams.get("blocked");
     if (!blocked) return;
     const blockedUrl = new URL(blocked);
-    document.getElementById("dest-hostname").textContent = blockedUrl.hostname;
+    document.querySelector("#dest-hostname").textContent = blockedUrl.hostname;
     window.state['blockedUrl'] = blocked;
   }
 
   function appendToHostnames(hostname) {
-    const hostnameList = document.getElementById("hostname-list");
+    const hostnameList = document.querySelector("#hostname-list");
     const li = document.createElement('li');
     li.innerHTML = `<span class="hostname">${hostname}</span> <a href="#" class="remove-link">Remove</a>`;
     hostnameList.append(li);
   }
 
   function appendToActivities(activity) {
-    const activityList = document.getElementById("activity-list");
+    const activityList = document.querySelector("#activity-list");
     const li = document.createElement('li');
     li.innerHTML = `<span class="activity">${activity}</span> <a href="#" class="remove-link">Remove</a>`;
     activityList.append(li);
@@ -144,20 +144,20 @@ function loadDistracticide(browser, window, document) {
     updateText(window);
     await showActivities();
     await showHostnames();
-    const button = document.getElementById("disable-button");
+    const button = document.querySelector("#disable-button");
     if (button) {
       button.onclick = deactivateOnTab;
     }
-    const addHostnameButton = document.getElementById("add-hostname-button");
+    const addHostnameButton = document.querySelector("#add-hostname-button");
     addHostnameButton.onclick = addHostname;
 
-    const addActivityButton = document.getElementById("add-activity-button");
+    const addActivityButton = document.querySelector("#add-activity-button");
     addActivityButton.onclick = addActivity;
 
-    const hostnameList = document.getElementById("hostname-list");
+    const hostnameList = document.querySelector("#hostname-list");
     hostnameList.addEventListener('click', removeHostname);
 
-    const activityList = document.getElementById("activity-list");
+    const activityList = document.querySelector("#activity-list");
     activityList.addEventListener('click', removeActivity);
   });
 
