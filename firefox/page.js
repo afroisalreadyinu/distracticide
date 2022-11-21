@@ -80,6 +80,7 @@ function loadDistracticide(browser, window, document) {
   }
 
   async function addHostname(event) {
+    event.preventDefault();
     const form = event.target.closest('form');
     const hostnameField = form.getElementsByTagName("input")[0];
     const errorField = form.getElementsByClassName("form-error")[0];
@@ -149,7 +150,7 @@ function loadDistracticide(browser, window, document) {
       button.onclick = deactivateOnTab;
     }
     const addHostnameButton = document.querySelector("#add-hostname-button");
-    addHostnameButton.onclick = addHostname;
+    addHostnameButton.addEventListener('click', addHostname);
 
     const addActivityButton = document.querySelector("#add-activity-button");
     addActivityButton.onclick = addActivity;

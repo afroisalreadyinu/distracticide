@@ -43,25 +43,14 @@ class FakeWindow {
   };
 };
 
-class FakeUL {
-  items = []
-  listeners = {}
-  append(item) {
-    this.items.push(item);
-  }
-  addEventListener(event, listener) {
-    this.listeners[event] = listener;
-  }
-}
-
 class FakeDocument {
   constructor(elements) {
-    this.elements = {'add-hostname-button': {},
-                     'add-activity-button': {},
+    this.elements = {'add-hostname-button': new FakeElement(),
+                     'add-activity-button': new FakeElement(),
                      'hostname-list': new FakeUL(),
                      'activity-list': new FakeUL(),
-                     'disable-button': {what: "now"},
-                     'dest-hostname': {}};
+                     'disable-button': new FakeElement(),
+                     'dest-hostname': new FakeElement()};
   }
   getElementById(id) {
     return this.elements[id];
@@ -79,6 +68,7 @@ class FakeDocument {
 
 class FakeElement {
   removed = false;
+  listeners = {}
   constructor(subelements) {
     this.subelements = subelements;
   }
@@ -90,6 +80,16 @@ class FakeElement {
   }
   remove() {
     this.removed = true;
+  }
+  addEventListener(event, listener) {
+    this.listeners[event] = listener;
+  }
+}
+
+class FakeUL extends FakeElement {
+  items = []
+  append(item) {
+    this.items.push(item);
   }
 }
 
@@ -198,12 +198,14 @@ describe("Extension page", () => {
     const fakeDocument = new FakeDocument();
     loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
     await fakeWindow.eventListeners.load();
-    let onclick = fakeDocument.elements['add-hostname-button'].onclick;
+    let onclick = fakeDocument.elements['add-hostname-button'].listeners.click;
     assert.notEqual(onclick, undefined);
     let fakeForm = new FakeElement([{tag: 'input', value: 'spiegel.de'}, {klass: 'form-error'}]);
-    let event = { target: {closest: function(tag) {if (tag == 'form') return fakeForm; return null;} } };
+    let prevented = false;
+    let event = { target: {closest: function(tag) {if (tag == 'form') return fakeForm; return null;} }, preventDefault() { prevented = true; }};
     await onclick(event);
     assert.deepEqual(fakeBrowser.sync.blockedHosts, ['spiegel.de']);
+    assert.isTrue(prevented);
   });
 
   it("You can remove hostnames", async function() {
