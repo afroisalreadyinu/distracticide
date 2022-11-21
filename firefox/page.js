@@ -44,6 +44,7 @@ function loadDistracticide(browser, window, document) {
   }
 
   async function removeHostname(event) {
+    event.preventDefault();
     if (!event.target.matches('.remove-link')) return;
     const hostname = event.target.parentElement.getElementsByClassName('hostname')[0].innerHTML;
     let values = await browser.storage.sync.get('blockedHosts');
@@ -118,6 +119,7 @@ function loadDistracticide(browser, window, document) {
 
 
   function addActivity(event) {
+    event.preventDefault();
     const form = event.target.closest('form');
     const activityField = form.getElementsByTagName("input")[0];
     const errorField = form.getElementsByClassName("form-error")[0];
@@ -134,10 +136,18 @@ function loadDistracticide(browser, window, document) {
           activityField.value = "";
           errorField.innerHTML = "";
           appendToActivities(newActivity);
+          toggleActivityInput();
         });
       };
     });
     return false;
+  }
+
+  function toggleActivityInput() {
+    let link = document.querySelector(".add-activity a");
+    link.style.display = link.style.display == "none" ? "inline" : "none";
+    let form = document.querySelector(".add-activity form");
+    form.style.display = link.style.display == "none" ? "block" : "none";
   }
 
   window.addEventListener('load', async function(event) {
@@ -152,14 +162,26 @@ function loadDistracticide(browser, window, document) {
     const addHostnameButton = document.querySelector("#add-hostname-button");
     addHostnameButton.addEventListener('click', addHostname);
 
-    const addActivityButton = document.querySelector("#add-activity-button");
-    addActivityButton.onclick = addActivity;
+
+    document.querySelector(".add-activity form").addEventListener("submit", addActivity);
+    document.querySelector(".add-activity a").addEventListener('click', (event) => {
+      event.preventDefault();
+      toggleActivityInput();
+    });
+    document.querySelector(".add-activity input").addEventListener('keyup', (event) => {
+      if (event.key === "Escape") {
+        event.target.value = "";
+        toggleActivityInput();
+      }
+    });
+
 
     const hostnameList = document.querySelector("#hostname-list");
     hostnameList.addEventListener('click', removeHostname);
 
     const activityList = document.querySelector("#activity-list");
     activityList.addEventListener('click', removeActivity);
+
   });
 
 };

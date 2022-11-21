@@ -28,7 +28,6 @@ a {
 }
 
 .form-section {
-    padding-top: 2em;
     padding-bottom: 2em;
 }
 
@@ -67,6 +66,16 @@ ul {
     font-size: 1rem;
     font-weight: normal;
 }
+
+.add-activity a {
+    font-size: 2rem;
+    color: var(--dark-charcoal);
+}
+
+.add-activity form {
+    display: none;
+}
+
 
 .bail-out {
     display: flex;
