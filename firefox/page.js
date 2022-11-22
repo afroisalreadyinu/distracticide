@@ -57,6 +57,7 @@ function loadDistracticide(browser, window, document) {
   }
 
   function removeActivity(event) {
+    event.preventDefault();
     if (!event.target.matches('.remove-link')) return false;
     const activity = event.target.parentElement.getElementsByClassName('activity')[0].innerHTML;
     browser.storage.sync.get('activities').then((values) => {
@@ -98,6 +99,7 @@ function loadDistracticide(browser, window, document) {
       hostnameField.value = "";
       errorField.innerHTML = "";
       appendToHostnames(newHostname);
+      toggleInput(document.querySelector(".add-hostname"));
     } else {
       errorField.innerHTML = "Host already in list";
     };
@@ -136,17 +138,17 @@ function loadDistracticide(browser, window, document) {
           activityField.value = "";
           errorField.innerHTML = "";
           appendToActivities(newActivity);
-          toggleActivityInput();
+          toggleInput(document.querySelector(".add-activity"));
         });
       };
     });
     return false;
   }
 
-  function toggleActivityInput() {
-    let link = document.querySelector(".add-activity a");
+  function toggleInput(containerDiv) {
+    let link = containerDiv.querySelector("a");
     link.style.display = link.style.display == "none" ? "inline" : "none";
-    let form = document.querySelector(".add-activity form");
+    let form = containerDiv.querySelector("form");
     form.style.display = link.style.display == "none" ? "block" : "none";
   }
 
@@ -159,19 +161,27 @@ function loadDistracticide(browser, window, document) {
     if (button) {
       button.onclick = deactivateOnTab;
     }
-    const addHostnameButton = document.querySelector("#add-hostname-button");
-    addHostnameButton.addEventListener('click', addHostname);
-
-
     document.querySelector(".add-activity form").addEventListener("submit", addActivity);
     document.querySelector(".add-activity a").addEventListener('click', (event) => {
       event.preventDefault();
-      toggleActivityInput();
+      toggleInput(document.querySelector(".add-activity"));
     });
     document.querySelector(".add-activity input").addEventListener('keyup', (event) => {
       if (event.key === "Escape") {
         event.target.value = "";
-        toggleActivityInput();
+        toggleInput(document.querySelector(".add-activity"));
+      }
+    });
+
+    document.querySelector(".add-hostname form").addEventListener("submit", addHostname);
+    document.querySelector(".add-hostname a").addEventListener('click', (event) => {
+      event.preventDefault();
+      toggleInput(document.querySelector(".add-hostname"));
+    });
+    document.querySelector(".add-hostname input").addEventListener('keyup', (event) => {
+      if (event.key === "Escape") {
+        event.target.value = "";
+        toggleInput(document.querySelector(".add-hostname"));
       }
     });
 

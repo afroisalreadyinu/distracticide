@@ -72,7 +72,7 @@ ul {
     color: var(--dark-charcoal);
 }
 
-.add-activity form {
+form {
     display: none;
 }
 
