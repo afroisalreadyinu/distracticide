@@ -62,7 +62,7 @@ ul {
     color: var(--imperial-red);
 }
 
-#activity-list .remove-link {
+#activity-list a {
     font-size: 1rem;
     font-weight: normal;
 }

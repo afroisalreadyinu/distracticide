@@ -21,7 +21,9 @@ function loadDistracticide(browser, window, document) {
   function appendToActivities(activity) {
     const activityList = document.querySelector("#activity-list");
     const li = document.createElement('li');
-    li.innerHTML = `<span class="activity">${activity}</span> <a href="#" class="remove-link">Remove</a>`;
+    li.innerHTML = `<span class="activity">${activity}</span>
+                  <a href="#" class="edit-link">Edit</a>
+                  <a href="#" class="remove-link">Remove</a>`;
     activityList.append(li);
   }
 
@@ -56,20 +58,30 @@ function loadDistracticide(browser, window, document) {
     };
   }
 
-  function removeActivity(event) {
+  function activityAction(event) {
     event.preventDefault();
-    if (!event.target.matches('.remove-link')) return false;
-    const activity = event.target.parentElement.getElementsByClassName('activity')[0].innerHTML;
-    browser.storage.sync.get('activities').then((values) => {
-      let activities = values['activities'] || [];
-      if (activities.includes(activity)) {
-        activities = activities.filter(act => act !== activity);
-        browser.storage.sync.set({activities}).then(() => {
-          event.target.parentElement.remove();
-        });
-      };
-    });
-    return false;
+    let action = null;
+    if (event.target.matches('.remove-link')) action = "remove";
+    if (event.target.matches('.edit-link')) action = "edit";
+    if (!action) return;
+    if (action == 'remove') {
+      const activity = event.target.parentElement.querySelector('.activity').innerHTML;
+      browser.storage.sync.get('activities').then((values) => {
+	let activities = values['activities'] || [];
+	if (activities.includes(activity)) {
+	  activities = activities.filter(act => act !== activity);
+	  browser.storage.sync.set({activities}).then(() => {
+	    event.target.parentElement.remove();
+	  });
+	};
+      });
+    };
+    if (action == 'edit') {
+      let contentSpan = event.target.parentElement.querySelector('.activity');
+      let input = document.createElement('input');
+      input.value = contentSpan.innerHTML;
+      contentSpan.replaceWith(input);
+    }
   }
 
   async function deactivateOnTab() {
@@ -147,9 +159,16 @@ function loadDistracticide(browser, window, document) {
 
   function toggleInput(containerDiv) {
     let link = containerDiv.querySelector("a");
-    link.style.display = link.style.display == "none" ? "inline" : "none";
+    let linkDisplay = window.getComputedStyle(link).display;
+    link.style.display = linkDisplay === "none" ? "" : "none";
     let form = containerDiv.querySelector("form");
-    form.style.display = link.style.display == "none" ? "block" : "none";
+    let formDisplay = window.getComputedStyle(form).display;
+    if (formDisplay === "none") {
+      form.style.display = "block";
+      form.querySelector("input").focus();
+    } else {
+      form.style.display = "none";
+    }
   }
 
   window.addEventListener('load', async function(event) {
@@ -190,7 +209,7 @@ function loadDistracticide(browser, window, document) {
     hostnameList.addEventListener('click', removeHostname);
 
     const activityList = document.querySelector("#activity-list");
-    activityList.addEventListener('click', removeActivity);
+    activityList.addEventListener('click', activityAction);
 
   });
 
