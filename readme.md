@@ -17,13 +17,13 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 # Todos
 
-[ ] Change page tests to use actual elements in a frame
+[ ] Testing
 
-[ ] Compatibility with Chrome (see [here](https://blog.shahednasser.com/making-your-extension-compatible-with-both-chrome-and-firefox/))
-
-[ ] Move to MV3 https://blog.mozilla.org/addons/2022/10/31/begin-your-mv3-migration-by-implementing-new-features-today/
+[ ] Add linting
 
 [ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
+
+[ ] Change page tests to use actual elements in a frame
 
 [ ] Publish extension ([guide](https://extensionworkshop.com/documentation/publish/))
 
@@ -36,10 +36,6 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 [ ] Add a button to pop up the config page
 
 [ ] Statistics (how often, how long, how many times per hour)
-
-[ ] Testing
-
-[ ] Add linting
 
 [x] Adding and removing URLs
 
