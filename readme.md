@@ -17,6 +17,8 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 # Todos
 
+[ ] Manifest v3 (https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/)
+
 [ ] Testing
 
 [ ] Add linting
