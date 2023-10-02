@@ -21,8 +21,6 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 [ ] Icon https://icon.kitchen/
 
-[ ] Testing
-
 [ ] Add linting
 
 [ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))

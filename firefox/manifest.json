@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "distracticide",
   "version": "0.0.1",
   "description": "Remind yourself what you wanted to do instead of getting distracted",
@@ -10,8 +10,9 @@
   "icons": {
     "48": "icons/border-48.png"
   },
-  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>", "storage", "tabs"],
-  "web_accessible_resources": ["page.html"],
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [{"matches": ["<all_urls>"], "resources": ["page.html"]}],
   "options_ui": {"page": "options.html"},
-  "background": {"scripts": ["distracticide.js"], "persistent": false}
+  "background": {"scripts": ["distracticide.js"]}
 }
