@@ -19,6 +19,8 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 [ ] Manifest v3 (https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/)
 
+[ ] Icon https://icon.kitchen/
+
 [ ] Testing
 
 [ ] Add linting
