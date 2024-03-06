@@ -34,6 +34,9 @@ class FakeBrowser {
 }
 
 class FakeWindow {
+  // The code in page.js will later add an event listener for 'load', which is
+  // kept in this object, and then that handler is called with
+  // fakeWindow.eventListeners.load()
   eventListeners = {}
   constructor(blockedUrl) {
     this.location = { href: `moz-extension://blah-yada/page.html?blocked=${encodeURIComponent(blockedUrl)}`};
@@ -42,57 +45,6 @@ class FakeWindow {
     this.eventListeners[eventName] = listener;
   };
 };
-
-class FakeDocument {
-  constructor(elements) {
-    this.elements = {'add-hostname-button': new FakeElement(),
-                     'add-activity-button': new FakeElement(),
-                     'hostname-list': new FakeUL(),
-                     'activity-list': new FakeUL(),
-                     'disable-button': new FakeElement(),
-                     'dest-hostname': new FakeElement()};
-  }
-  getElementById(id) {
-    return this.elements[id];
-  }
-  createElement(tag) {
-    return {};
-  }
-  querySelector(selector) {
-    if (selector.startsWith("#")) {
-      return this.elements[selector.substring(1)];
-    }
-    return null;
-  }
-}
-
-class FakeElement {
-  removed = false;
-  listeners = {}
-  constructor(subelements) {
-    this.subelements = subelements;
-  }
-  getElementsByTagName(tag) {
-    return this.subelements.filter((e) => e.tag == tag);
-  }
-  getElementsByClassName(klass) {
-    return this.subelements.filter((e) => e.klass == klass);
-  }
-  remove() {
-    this.removed = true;
-  }
-  addEventListener(event, listener) {
-    this.listeners[event] = listener;
-  }
-}
-
-class FakeUL extends FakeElement {
-  items = []
-  append(item) {
-    this.items.push(item);
-  }
-}
-
 
 describe("Background scripts", () => {
 
@@ -143,25 +95,28 @@ describe("Background scripts", () => {
 });
 
 describe("Extension page", () => {
+  beforeEach(async function () {
+    for (const li of document.querySelector("#hostname-list").children) {
+      li.remove();
+    };
+  });
 
   it("Intro text updated", async function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
-    const fakeDocument = new FakeDocument();
-    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    loadDistracticide(fakeBrowser, fakeWindow, document);
     assert.equal(Object.keys(fakeWindow.eventListeners).length, 1);
     assert("load" in fakeWindow.eventListeners);
     await fakeWindow.eventListeners.load();
-    assert.equal(fakeDocument.elements['dest-hostname'].textContent, 'twitter.com');
+    assert.equal(document.querySelector("#dest-hostname").textContent, 'twitter.com');
   });
 
   it("Tasks are loaded from storage", async function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], [], ["Do something"]);
     const fakeWindow = new FakeWindow("https://twitter.com");
-    const fakeDocument = new FakeDocument();
-    let activities = fakeDocument.elements['activity-list'].items;
-    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    loadDistracticide(fakeBrowser, fakeWindow, document);
     await fakeWindow.eventListeners.load();
+    let activities = document.querySelector("#activity-list").children;
     assert.equal(activities.length, 1);
     assert.equal(activities[0].innerHTML,
                  '<span class="activity">Do something</span> <a href="#" class="remove-link">Remove</a>');
@@ -170,10 +125,9 @@ describe("Extension page", () => {
   it("Blocked hosts are loaded from storage", async function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], [], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
-    const fakeDocument = new FakeDocument();
-    let activities = fakeDocument.elements['hostname-list'].items;
-    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    loadDistracticide(fakeBrowser, fakeWindow, document);
     await fakeWindow.eventListeners.load();
+    let activities = document.querySelector('#hostname-list').children;
     assert.equal(activities.length, 1);
     assert.equal(activities[0].innerHTML,
                  '<span class="hostname">twitter.com</span> <a href="#" class="remove-link">Remove</a>');
@@ -182,10 +136,10 @@ describe("Extension page", () => {
   it("Deactivate button navigates away and deactivates", async function() {
     const fakeBrowser = new FakeBrowser(["twitter.com"], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
-    const fakeDocument = new FakeDocument();
-    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    loadDistracticide(fakeBrowser, fakeWindow, document);
     await fakeWindow.eventListeners.load();
-    let onclick = fakeDocument.elements['disable-button'].onclick;
+
+    let onclick = document.querySelector('#disable-button').onclick;
     assert.notEqual(onclick, undefined);
     await onclick();
     assert.deepEqual(fakeBrowser.local.deactivatedOnTabs, [VERY_RANDOM_ID]);
@@ -195,32 +149,26 @@ describe("Extension page", () => {
   it("You can add new hostnames", async function() {
     const fakeBrowser = new FakeBrowser([], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
-    const fakeDocument = new FakeDocument();
-    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    loadDistracticide(fakeBrowser, fakeWindow, document);
     await fakeWindow.eventListeners.load();
-    let onclick = fakeDocument.elements['add-hostname-button'].listeners.click;
-    assert.notEqual(onclick, undefined);
-    let fakeForm = new FakeElement([{tag: 'input', value: 'spiegel.de'}, {klass: 'form-error'}]);
-    let prevented = false;
-    let event = { target: {closest: function(tag) {if (tag == 'form') return fakeForm; return null;} }, preventDefault() { prevented = true; }};
-    await onclick(event);
+
+    document.querySelector('.add-hostname a').click();
+    assert.equal(getComputedStyle(document.querySelector('.add-hostname')).getPropertyValue("display"), "block");
+    let form = document.querySelector('.add-hostname form');
+    let field = form.getElementsByTagName("input")[0];
+    field.value = "spiegel.de";
+    await form.requestSubmit();
     assert.deepEqual(fakeBrowser.sync.blockedHosts, ['spiegel.de']);
-    assert.isTrue(prevented);
   });
 
   it("You can remove hostnames", async function() {
     const fakeBrowser = new FakeBrowser(['spiegel.de', 'twitter.com'], []);
     const fakeWindow = new FakeWindow("https://twitter.com");
-    const fakeDocument = new FakeDocument();
-    loadDistracticide(fakeBrowser, fakeWindow, fakeDocument);
+    loadDistracticide(fakeBrowser, fakeWindow, document);
     await fakeWindow.eventListeners.load();
-    let onclick = fakeDocument.elements['hostname-list'].listeners['click'];
-    assert.notEqual(onclick, undefined);
-    let parent = new FakeElement([{klass: 'hostname', innerHTML: 'spiegel.de'}]);
-    let target = {parentElement: parent, matches: function(spec) {if (spec == '.remove-link') return true; return false;} };
-    await onclick({target});
+    const hostnameList = document.querySelector('#hostname-list');
+    await hostnameList.getElementsByClassName("remove-link")[0].click();
     assert.deepEqual(fakeBrowser.sync.blockedHosts, ['twitter.com']);
-    assert.isTrue(parent.removed);
   });
 
 });

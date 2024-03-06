@@ -19,15 +19,11 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 [ ] Manifest v3 (https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/)
 
-[ ] Icon https://icon.kitchen/
-
-[ ] Add linting
-
 [ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
 
-[ ] Change page tests to use actual elements in a frame
-
 [ ] Publish extension ([guide](https://extensionworkshop.com/documentation/publish/))
+
+[ ] Add linting
 
 [ ] General styling
 
@@ -38,6 +34,12 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 [ ] Add a button to pop up the config page
 
 [ ] Statistics (how often, how long, how many times per hour)
+
+## Done
+
+[x] Change page tests to use actual elements in a frame
+
+[x] Icon https://icon.kitchen/
 
 [x] Adding and removing URLs
 

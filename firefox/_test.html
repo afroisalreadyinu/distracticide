@@ -23,6 +23,41 @@
       mocha.checkLeaks();
     </script>
 
+    <main>
+      <h1>distracticide</h1>
+
+      <p>Instead of going to <span id="dest-hostname">wherever you wanted to go</span>, consider
+      these alternatives:</p>
+
+      <ul id="activity-list">
+      </ul>
+
+      <div class="form-section add-activity">
+        <a href="#">+</a>
+        <form>
+          <input  type="text" name="new-activity" size="40">
+          <span class="form-error"></span>
+        </form>
+      </div>
+
+
+      <section class="bail-out">
+        <button id="disable-button">I still want to go there</button>
+      </section>
+
+      <ul id="hostname-list">
+      </ul>
+
+      <div class="form-section add-hostname">
+        <a href="#">+</a>
+        <form>
+          <input  type="text" name="new-hostname" size="20">
+          <span class="form-error"></span>
+        </form>
+      </div>
+
+    </main>
+
     <script src="_test.js"></script>
 
 

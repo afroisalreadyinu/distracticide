@@ -153,6 +153,9 @@ function loadDistracticide(browser, window, document) {
   }
 
   window.addEventListener('load', async function(event) {
+    /* Register even handlers for links and form submits and load blocked
+     * hostnames and activities from storage.
+     */
     window.state = {};
     updateText(window);
     await showActivities();
