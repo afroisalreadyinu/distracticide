@@ -17,17 +17,9 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 # Todos
 
-[ ] Manifest v3 (https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/)
-
 [ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
 
 [ ] Publish extension ([guide](https://extensionworkshop.com/documentation/publish/))
-
-[ ] Add linting
-
-[ ] General styling
-
-[ ] Styling of forms
 
 [ ] Edit action items by clicking on them
 
@@ -36,6 +28,8 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 [ ] Statistics (how often, how long, how many times per hour)
 
 ## Done
+
+[x] Manifest v3 (https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/)
 
 [x] Change page tests to use actual elements in a frame
 
