@@ -129,8 +129,8 @@ describe("Extension page", () => {
     await fakeWindow.eventListeners.load();
     let activities = document.querySelector('#hostname-list').children;
     assert.equal(activities.length, 1);
-    assert.equal(activities[0].innerHTML,
-                 '<span class="hostname">twitter.com</span> <a href="#" class="remove-link">Remove</a>');
+    assert.include(activities[0].innerHTML, '<span class="hostname">twitter.com</span>');
+    assert.include(activities[0].innerHTML, '<a class="remove-link" href="#">Remove</a>');
   });
 
   it("Deactivate button navigates away and deactivates", async function() {

@@ -14,7 +14,15 @@ function loadDistracticide(browser, window, document) {
   function appendToHostnames(hostname) {
     const hostnameList = document.querySelector("#hostname-list");
     const li = document.createElement('li');
-    li.innerHTML = `<span class="hostname">${hostname}</span> <a href="#" class="remove-link">Remove</a>`;
+    let span = document.createElement("span");
+    span.className = "hostname";
+    span.innerText = hostname;
+    let link = document.createElement("a");
+    link.className = "remove-link";
+    link.href = "#";
+    link.innerText = "Remove";
+    li.appendChild(span);
+    li.appendChild(link);
     hostnameList.append(li);
   }
 
@@ -164,23 +172,38 @@ function loadDistracticide(browser, window, document) {
     if (button) {
       button.onclick = deactivateOnTab;
     }
-    document.querySelector(".add-activity form").addEventListener("submit", addActivity);
-    document.querySelector(".add-activity a").addEventListener('click', (event) => {
+    let addActivityForm = document.querySelector(".add-activity form");
+    if (addActivityForm) {
+        addActivityForm.addEventListener("submit", addActivity);
+    };
+
+    let addActivityButton = document.querySelector(".add-activity a");
+    if (addActivityButton) {
+      addActivityButton.addEventListener('click', (event) => {
       event.preventDefault();
       toggleInput(document.querySelector(".add-activity"));
-    });
-    document.querySelector(".add-activity input").addEventListener('keyup', (event) => {
-      if (event.key === "Escape") {
-        event.target.value = "";
-        toggleInput(document.querySelector(".add-activity"));
-      }
-    });
+        });
+    };
+
+    let addActivityInput = document.querySelector(".add-activity input");
+    if (addActivityInput) {
+        addActivityInput.addEventListener('keyup', (event) => {
+          if (event.key === "Escape") {
+            event.target.value = "";
+            toggleInput(document.querySelector(".add-activity"));
+          }
+        });
+    };
 
     document.querySelector(".add-hostname form").addEventListener("submit", addHostname);
-    document.querySelector(".add-hostname a").addEventListener('click', (event) => {
-      event.preventDefault();
-      toggleInput(document.querySelector(".add-hostname"));
-    });
+
+    let addHostnameButton = document.querySelector(".add-hostname a");
+    if (addHostnameButton) {
+        addHostnameButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          toggleInput(document.querySelector(".add-hostname"));
+        });
+    };
     document.querySelector(".add-hostname input").addEventListener('keyup', (event) => {
       if (event.key === "Escape") {
         event.target.value = "";
@@ -193,8 +216,9 @@ function loadDistracticide(browser, window, document) {
     hostnameList.addEventListener('click', removeHostname);
 
     const activityList = document.querySelector("#activity-list");
-    activityList.addEventListener('click', removeActivity);
-
+    if (activityList) {
+      activityList.addEventListener('click', removeActivity);
+    };
   });
 
 };

@@ -76,6 +76,9 @@ form {
     display: none;
 }
 
+.options form {
+    display: flex;
+}
 
 .bail-out {
     display: flex;
