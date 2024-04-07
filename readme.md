@@ -2,12 +2,21 @@
 
 An extension for reminding you of better things to do when you get distracted again.
 
+## Description
+
+Distracticide is a very simple extension that lets you block distracting web
+pages by showing you a list of activities of your own choosing when you attempt
+to navigate to one of them. The hosts of the distraction pages and the
+activities can be configured, and are synched on your Firefox profile.
+
 ## Developing
 
-On Firefox, open the profiles page by going to `about:profiles`, and create a new profile for
-extension debugging. Start a browser session in this profile, open `about:debugging`, click on "Load
-temporary Add-on", and select `manifest.json`. The extension is now running. If you want to view the
-debug console for the extension, click on "Inspect" next to the freshly installed extension.
+On Firefox, open the profiles page by going to `about:profiles`, and create a
+new profile for extension debugging. Start a browser session in this profile,
+open `about:debugging`, click on "Load temporary Add-on", and select
+`manifest.json`. The extension is now running. If you want to view the debug
+console for the extension, click on "Inspect" next to the freshly installed
+extension.
 
 ```bash
 alias firefox=/Applications/Firefox.app/Contents/MacOS/firefox
