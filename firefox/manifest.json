@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "distracticide",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Remind yourself what you wanted to do instead of getting distracted",
   "homepage_url": "https://github.com/afroisalreadyinu/distracticide",
   "browser_specific_settings": {

@@ -154,6 +154,7 @@ function loadDistracticide(browser, window, document) {
   }
 
   function toggleInput(containerDiv) {
+    if (containerDiv.classList.contains("options")) return;
     let link = containerDiv.querySelector("a");
     link.style.display = link.style.display == "none" ? "inline" : "none";
     let form = containerDiv.querySelector("form");
