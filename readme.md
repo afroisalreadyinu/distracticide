@@ -26,9 +26,15 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 # Todos
 
-[ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
+[ ] Show last done items
 
-[ ] Publish extension ([guide](https://extensionworkshop.com/documentation/publish/))
+[ ] What about pages where base domain redirects to www?
+
+[ ] Option to hide the "want to go there" button
+
+[ ] Better styling for forms
+
+[ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
 
 [ ] Edit action items by clicking on them
 
@@ -57,3 +63,5 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 [x] Shorten links
 
 [x] Color schema
+
+[x] Publish extension ([guide](https://extensionworkshop.com/documentation/publish/))
