@@ -26,11 +26,15 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 # Todos
 
-[ ] Show last done items
-
 [ ] What about pages where base domain redirects to www?
 
+[ ] Show last done items
+
+[ ] Reordering action items
+
 [ ] Option to hide the "want to go there" button
+
+[ ] Add couple of domains when installed
 
 [ ] Better styling for forms
 
