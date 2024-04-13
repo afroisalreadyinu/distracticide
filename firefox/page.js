@@ -1,5 +1,15 @@
 "use strict";
 
+function cleanHostname(url) {
+  let parsedUrl = null;
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    parsedUrl = new URL(url)
+  } else {
+    parsedUrl = new URL(`https://${url}`);
+  }
+  return parsedUrl.hostname;
+};
+
 function loadDistracticide(browser, window, document) {
 
   function updateText(theWindow) {
@@ -94,9 +104,11 @@ function loadDistracticide(browser, window, document) {
     const form = event.target.closest('form');
     const hostnameField = form.getElementsByTagName("input")[0];
     const errorField = form.getElementsByClassName("form-error")[0];
-    const newHostname = hostnameField.value;
-    if (newHostname.trim() === "") {
-      errorField.innerHTML = "Provide non-empty host";
+    let newHostname = "";
+    try {
+      newHostname = cleanHostname(hostnameField.value);
+    } catch (e) {
+      errorField.innerHTML = "Please provide a valid URL";
       return false;
     }
     let values = await browser.storage.sync.get('blockedHosts');

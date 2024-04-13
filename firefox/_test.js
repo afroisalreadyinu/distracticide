@@ -46,6 +46,14 @@ class FakeWindow {
   };
 };
 
+describe("Helpers", () => {
+  it("Parses URL correctly", async function() {
+    assert.equal(cleanHostname("blah.io"), "blah.io");
+    assert.equal(cleanHostname("blah.io/yada/etc.pp"), "blah.io");
+    assert.equal(cleanHostname("https://blah.io/yada/etc.pp"), "blah.io");
+  });
+});
+
 describe("Background scripts", () => {
 
   it("Skips requests that are not main_from or object", async function() {
