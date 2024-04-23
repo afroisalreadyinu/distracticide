@@ -9,6 +9,8 @@
     --paradise-ping: #EF476F;
     --caribbean-green: #06D6A0;
     --imperial-red: #F02D3A;
+    --forest-green: #228B22;
+    --light-slate-gray: #778899;
 }
 
 body {
@@ -54,12 +56,16 @@ ul {
     color: var(--paradise-ping);
 }
 
-#activity-list li:nth-child(3) {
+#activity-list li:nth-child(3n) {
     color: var(--caribbean-green);
 }
 
-#activity-list li:nth-child(4) {
+#activity-list li:nth-child(4n) {
     color: var(--imperial-red);
+}
+
+#activity-list li:nth-child(5n) {
+    color: var(--forest-green);
 }
 
 #activity-list .remove-link {
