@@ -13,7 +13,10 @@ function getHandlers(browser) {
     for (const url of blockedHosts) {
       if (url === pageUrl.hostname) {
         let blocked = encodeURIComponent(requestDetails.url);
-        return {redirectUrl: browser.runtime.getURL(`page.html?blocked=${blocked}`)};
+        const hideButtonStorage = await browser.storage.sync.get('hideGoThereButton');
+        const hideButton = hideButtonStorage['hideGoThereButton'] || false;
+        const hideButtonParam = hideButton ? 1 : 0;
+        return {redirectUrl: browser.runtime.getURL(`page.html?blocked=${blocked}&hideButton=${hideButtonParam}`)};
       }
     }
     return {};

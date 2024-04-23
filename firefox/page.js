@@ -12,13 +12,18 @@ function cleanHostname(url) {
 
 function loadDistracticide(browser, window, document) {
 
-  function updateText(theWindow) {
+  function updatePage(theWindow) {
     const pageUrl = new URL(theWindow.location.href);
     const blocked = pageUrl.searchParams.get("blocked");
     if (!blocked) return;
     const blockedUrl = new URL(blocked);
     document.querySelector("#dest-hostname").textContent = blockedUrl.hostname;
     window.state['blockedUrl'] = blocked;
+
+    const hideButton = parseInt(pageUrl.searchParams.get("hideButton"));
+    if (!hideButton) {
+      document.querySelector(".bail-out").style.display = "flex";
+    };
   }
 
   function appendToHostnames(hostname) {
@@ -173,12 +178,17 @@ function loadDistracticide(browser, window, document) {
     form.style.display = link.style.display == "none" ? "block" : "none";
   }
 
+  async function toggleHideGoThere(hideGoThereCheckbox) {
+    const hideButton = hideGoThereCheckbox.target.checked;
+    await browser.storage.sync.set({hideGoThereButton: hideButton});
+  }
+
   window.addEventListener('load', async function(event) {
     /* Register even handlers for links and form submits and load blocked
      * hostnames and activities from storage.
      */
     window.state = {};
-    updateText(window);
+    updatePage(window);
     await showActivities();
     await showHostnames();
     const button = document.querySelector("#disable-button");
@@ -232,6 +242,12 @@ function loadDistracticide(browser, window, document) {
     if (activityList) {
       activityList.addEventListener('click', removeActivity);
     };
+
+    const hideGoThereButton = document.querySelector("#hide-gothere");
+    if (hideGoThereButton) {
+      hideGoThereButton.addEventListener('change', toggleHideGoThere);
+    };
+
   });
 
 };

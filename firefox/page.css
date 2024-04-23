@@ -81,7 +81,7 @@ form {
 }
 
 .bail-out {
-    display: flex;
+    display: none;
 }
 
 .bail-out button {

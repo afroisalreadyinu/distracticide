@@ -32,11 +32,11 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 
 [ ] Reordering action items
 
-[ ] Option to hide the "want to go there" button
-
 [ ] Add couple of domains when installed
 
 [ ] Better styling for forms
+- [Web Design in 4 minutes](https://jgthms.com/web-design-in-4-minutes/)
+- [Awesome CSS Frameworks](https://github.com/troxler/awesome-css-frameworks#very-light)
 
 [ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
 
@@ -47,6 +47,8 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 [ ] Statistics (how often, how long, how many times per hour)
 
 ## Done
+
+[x] Option to hide the "want to go there" button
 
 [x] Manifest v3 (https://extensionworkshop.com/documentation/develop/manifest-v3-migration-guide/)
 
