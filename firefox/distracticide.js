@@ -1,5 +1,12 @@
 "use strict";
 
+function hostsMatch(configHost, pageHost) {
+  if (configHost === pageHost) return true;
+  if (configHost === `www.${pageHost}`) return true;
+  if (`www.${configHost}` === pageHost) return true;
+  return false;
+}
+
 function getHandlers(browser) {
 
   async function checkURL(requestDetails) {
@@ -11,7 +18,7 @@ function getHandlers(browser) {
     const blockedHostsData = await browser.storage.sync.get('blockedHosts');
     const blockedHosts = blockedHostsData['blockedHosts'] || [];
     for (const url of blockedHosts) {
-      if (url === pageUrl.hostname) {
+      if (hostsMatch(url, pageUrl.hostname)) {
         let blocked = encodeURIComponent(requestDetails.url);
         const hideButtonStorage = await browser.storage.sync.get('hideGoThereButton');
         const hideButton = hideButtonStorage['hideGoThereButton'] || false;
