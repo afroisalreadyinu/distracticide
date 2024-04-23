@@ -11,22 +11,31 @@ activities can be configured, and are synched on your Firefox profile.
 
 ## Developing
 
-On Firefox, open the profiles page by going to `about:profiles`, and create a
-new profile for extension debugging. Start a browser session in this profile,
-open `about:debugging`, click on "Load temporary Add-on", and select
-`manifest.json`. The extension is now running. If you want to view the debug
-console for the extension, click on "Inspect" next to the freshly installed
-extension.
+You can either use Mozilla's
+[web-ext](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/)
+tool, or install it temporarily using the debug page.
 
-```bash
-alias firefox=/Applications/Firefox.app/Contents/MacOS/firefox
-firefox --createprofile clitesting
-firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clitesting
-```
+### Temporary install
+
+In a new tab, type `about:debugging`, click on "Load temporary Add-on", and
+select `manifest.json` in the file navigation. The extension is now running. If
+you want to view the debug console for the extension, click on "Inspect" next to
+the freshly installed extension. After any changes, click "Reloaed" to make sure
+they take effect. You might also one want to install the extension in a new
+browser profile, which you can create on the `about:profiles` page.
+
+### Using web-ext
+
+This is as simple as running `web-ext run` in the `firefox` directory. The
+extension will be automatically reloaded when files change.
+
+## Creating a distribution package
+
+The command `web-ext build` will create a zip file in the directory
+`firefox/web-ext-artifacts`, the filename of which will contain the version in
+`manifest.json`.
 
 # Todos
-
-[ ] What about pages where base domain redirects to www?
 
 [ ] Show last done items
 
@@ -38,8 +47,6 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 - [Web Design in 4 minutes](https://jgthms.com/web-design-in-4-minutes/)
 - [Awesome CSS Frameworks](https://github.com/troxler/awesome-css-frameworks#very-light)
 
-[ ] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
-
 [ ] Edit action items by clicking on them
 
 [ ] Add a button to pop up the config page
@@ -47,6 +54,10 @@ firefox --profile ~/Library/Application\ Support/Firefox/Profiles/ljpfprq0.clite
 [ ] Statistics (how often, how long, how many times per hour)
 
 ## Done
+
+[x] What about pages where base domain redirects to www?
+
+[x] Use [web-ext](https://github.com/mozilla/web-ext) to do stuff (see also [this](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/))
 
 [x] Option to hide the "want to go there" button
 
