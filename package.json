@@ -1,0 +1,24 @@
+{
+  "name": "distracticide",
+  "version": "0.0.1",
+  "description": "Firefox extension to fight distraction",
+  "homepage": "https://github.com/afroisalreadyinu/distracticide#readme",
+  "bugs": {
+    "url": "https://github.com/afroisalreadyinu/distracticide/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afroisalreadyinu/distracticide.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && copyfiles -u 1 src/manifest.json src/*.html src/styles/*.css src/*.png dist/"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "typescript": "^5.9.3"
+  }
+}
