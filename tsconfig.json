@@ -2,11 +2,13 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "ES2020",
+    "lib": ["es2016", "dom"],
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["firefox-webext-browser"]
   },
   "include": ["firefox/**/*"]
 }
