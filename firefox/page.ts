@@ -28,7 +28,7 @@ function updatePage() {
     const hide_button = parseInt(hide_button_arg);
     if (hide_button == 0) {
 	const button = document.querySelector(".bail-out");
-	if (button instanceof HTMLButtonElement) {
+	if (button instanceof HTMLElement) {
 	    button.style.display = "flex";
 	}
     };

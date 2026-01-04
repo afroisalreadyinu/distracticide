@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && copyfiles -u 1 firefox/manifest.json firefox/*.html firefox/styles/*.css firefox/*.png dist/"
+    "build": "tsc && copyfiles -u 1 firefox/manifest.json firefox/*.html firefox/*.css firefox/*.png dist/"
   },
   "devDependencies": {
     "@types/firefox-webext-browser": "^143.0.0",
